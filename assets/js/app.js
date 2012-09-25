@@ -80,7 +80,7 @@ $(document).ready(function(){
     }
   });
 
-  fetch_templates('/templates.html', function(){
+  fetch_templates('./templates.html', function(){
     panda.router = new appRouter();
     Backbone.history.start();
   });
