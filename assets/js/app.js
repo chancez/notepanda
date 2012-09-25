@@ -82,6 +82,8 @@ $(document).ready(function(){
 
   fetch_templates('./templates.html', function(){
     panda.router = new appRouter();
-    Backbone.history.start();
+    Backbone.history.start({
+      root: window.location.pathname
+    });
   });
 });
