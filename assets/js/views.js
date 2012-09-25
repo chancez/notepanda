@@ -2,14 +2,13 @@ var noteView = Backbone.View.extend({
   initialize: function() {
     this.parents = panda.notes.get_parents(this.options.model.get('parent_id'));
     this.children = panda.notes.with_parent(this.options.model.get('id'));
-    
-    window.v = this;
 
   },
 
   events: {
     'click .new_note': 'new_note',
-    'click .category, .note': 'view_note'
+    'click .category, .note': 'view_note',
+    'click .delete': 'delete_note'
   },
 
   attributes: {
@@ -27,15 +26,30 @@ var noteView = Backbone.View.extend({
   },
 
   new_note: function() {
-      var id = this.options.model.get('id');
-      panda.router.navigate('#!/new_note/' + id, {trigger: true});
+    var id = this.options.model.get('id');
+    panda.router.navigate('#!/new_note/' + id, {trigger: true});
   },
 
   view_note: function(event) {
-      var target_href = $(event.target).attr('data-href');
-      if(target_href) {
-        panda.router.navigate(target_href, {trigger: true});
-      }
+    var target_href = $(event.target).attr('data-href');
+    if(target_href) {
+      panda.router.navigate(target_href, {trigger: true});
+    }
+  },
+
+  delete_note: function(event) {
+    event.preventDefault();
+    var should_delete = confirm("Are you sure you want to delete this note/category? " +
+                                "All children of this item will be inherited by this item's" +
+                                " parent.");
+    if(should_delete) {
+      _.each(this.children, function(child) {
+        child.set({'parent_id': this.options.model.get('parent_id')});
+      }, this);
+      panda.notes.remove(this.options.model);
+      panda.notes.sync_notes();
+      panda.router.navigate("/#!/", {trigger: true});
+    }
   }
 });
 
