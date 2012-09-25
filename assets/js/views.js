@@ -70,7 +70,10 @@ var editNoteView = Backbone.View.extend({
         content: ''
       }));
     }
-    this.$el.find('textarea').wysihtml5();
+    this.$el.find('textarea').wysihtml5({
+      'html': true,
+      'color': true
+    });
     return this;
   },
 
