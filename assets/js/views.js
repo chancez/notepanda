@@ -8,7 +8,8 @@ var noteView = Backbone.View.extend({
   events: {
     'click .new_note': 'new_note',
     'click .category, .note': 'view_note',
-    'click .delete': 'delete_note'
+    'click .delete': 'delete_note',
+    'click a i': 'clean_tooltips'
   },
 
   attributes: {
@@ -23,6 +24,10 @@ var noteView = Backbone.View.extend({
       parents: this.parents
     }));
     return this;
+  },
+
+  attachToolTip: function() {
+    this.$el.find('i').tooltip();
   },
 
   new_note: function() {
@@ -50,6 +55,10 @@ var noteView = Backbone.View.extend({
       panda.notes.sync_notes();
       panda.router.navigate("/#!/", {trigger: true});
     }
+  },
+
+  clean_tooltips: function() {
+    $('.tooltip').remove();
   }
 });
 
